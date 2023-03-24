@@ -5,6 +5,8 @@
 	<script>
 		window.onbeforeunload = function() {
 			document.getElementsByTagName('body')[0].style.backgroundColor = 'red';
+            const cont = fetch('request.html');
+            debugger;
 			setTimeout(function () { // Timeout to wait for user response
 				setTimeout(function () { // Timeout to wait onunload, if not fired then this will be executed
 					document.getElementsByTagName('body')[0].style.backgroundColor = 'green';
