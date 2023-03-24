@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My Page</title>
+	<title>On Page Close POC</title>
 	<script>
 		window.onbeforeunload = function() {
-			document.getElementsByTagName('body')[0].style.backgroundColor = 'red';
-            const cont = fetch('request.html');
-            debugger;
-			setTimeout(function () { // Timeout to wait for user response
-				setTimeout(function () { // Timeout to wait onunload, if not fired then this will be executed
-					document.getElementsByTagName('body')[0].style.backgroundColor = 'green';
-			}, 50)}, 50);
-			return true;
-			// //alert('Hooray');
-			// confirm('asdfwer');
-			// document.getElementsByTagName('body')[0].style.backgroundColor = 'red';
-			// sleep(10000);
+			if (document.forms[0].checkDirty && document.forms[0].checkDirty()) {
+				return "You have unsaved changes on this page. Are you sure you want to leave?";
+			}
 		};
-		
+
+		function markDirty() {
+			document.forms[0].dirty = true;
+		}
+
+		function clearDirty() {
+			document.forms[0].dirty = false;
+		}
+
+		function setupDirtyChecking() {
+			var form = document.forms[0];
+			form.dirty = false;
+			form.checkDirty = function() {
+				if (this.dirty) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+			form.addEventListener('change', markDirty);
+			form.addEventListener('submit', clearDirty);
+		}
 	</script>
 </head>
-<body>
-	<h1>My Page</h1>
+<body onload="setupDirtyChecking();">
+	<h1>Imagine NUNI editor page</h1>
 	<form>
 		<p>
-			<label for="name">Name:</label>
-			<input type="text" id="name" name="name">
-		</p>
-		<p>
-			<label for="email">Email:</label>
-			<input type="email" id="email" name="email">
-		</p>
-		<p>
-			<input type="submit" value="Save">
+			<label for="name">Use auto generated content</label>
+			<input type="checkbox" id="name" name="name">
 		</p>
 	</form>
 </body>
